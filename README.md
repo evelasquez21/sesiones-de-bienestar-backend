@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # sesiones-de-bienestar
 Aquí subiré mis avances de mi proyecto final del curso de Programación 2
 =======
@@ -9,4 +8,3 @@ Aquí subiré mis avances de mi proyecto final del curso de Programación 2
 
 ## Avance actual
 Diseño inicial y setup del proyecto
->>>>>>> 12b1020 (Diseño inicial y setup del proyecto)
