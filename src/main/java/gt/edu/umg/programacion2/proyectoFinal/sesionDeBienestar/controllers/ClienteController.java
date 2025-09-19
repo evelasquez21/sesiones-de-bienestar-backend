@@ -2,15 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package controllers;
+package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.controllers;
 
 /**
  *
  * @author eduar
  */
-public class RecepcionistaController {
+
+public class ClienteController {
     
-    public void agendarCita(){
+    public void solicitarCita(){
         
     }
     
@@ -18,7 +19,15 @@ public class RecepcionistaController {
         
     }
     
-    public void verSolicitud(){
+    public void verPerfil(){
+        
+    }
+    
+    public void verServicios(){
+        
+    }
+    
+    public void verFacturas(){
         
     }
 }

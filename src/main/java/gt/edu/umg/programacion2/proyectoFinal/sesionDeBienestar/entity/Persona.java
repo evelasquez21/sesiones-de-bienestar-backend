@@ -2,30 +2,41 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package models;
+package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 /**
  *
  * @author eduar
  */
+
+
+@MappedSuperclass
 public abstract class Persona {
-    private BigInteger dpi;
-    private String nombreCompleto;
-    private String direccion;
-    private LocalDate fechaNacimiento;
-    private int telefono;
     
-    // Constructor de clase
-    public Persona(BigInteger dpi, String nombreCompleto, String direccion, LocalDate fechaNacimiento, int telefono){
-        this.dpi = dpi;
-        this.nombreCompleto = nombreCompleto;
-        this.direccion = direccion;
-        this.fechaNacimiento = fechaNacimiento;
-        this.telefono = telefono;
-    }
+    // Atributos de clase
+    @Id
+    @Column(name = "dpi")
+    private BigInteger dpi;
+    
+    @Column(name ="nombreCompleto")
+    private String nombreCompleto;
+    
+    @Column(name ="direccion")
+    private String direccion;
+    
+    @CreationTimestamp
+    @Column(name = "fechaNacimiento", updatable = false)
+    private LocalDate fechaNacimiento;
+    
+    @Column(name ="telefono")
+    private int telefono;
 
     // Inicio - Sección de Getters y Setters
     public BigInteger getDpi() {
@@ -69,14 +80,5 @@ public abstract class Persona {
     }
     
     // Fin - Sección de Getters y Setters
-    
-    @Override
-    public String toString(){
-        return 
-                "DPI: " + this.dpi +
-                "\nNombre completo: " + this.nombreCompleto +
-                "\nDireccion: " + this.direccion;
-    }
-    
     
 }

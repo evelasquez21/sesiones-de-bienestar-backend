@@ -2,23 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package models;
+package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
-import java.math.BigInteger;
-import java.time.LocalDate;
+import jakarta.persistence.Entity;
+import java.util.Objects;
 
 
 /**
  *
  * @author eduar
  */
+
+@Entity
 public class Usuario extends Persona{
     private String correo;
     private String contrasena;
     
     // Constructor de clase
-    public Usuario(String correo, String contrasena, BigInteger dpi, String nombreCompleto, String direccion, LocalDate fechaNacimiento, int telefono) {
-        super(dpi, nombreCompleto, direccion, fechaNacimiento, telefono);
+    public Usuario() {
+    }
+    
+    public Usuario(String correo, String contrasena) {
         this.correo = correo;
         this.contrasena = contrasena;
     }
@@ -42,10 +46,20 @@ public class Usuario extends Persona{
     
     // Fin - Sección de Getters y Setters
     
+    // Inicio Métodos equals y hashcode
     @Override
-    public String toString(){
-        return 
-            super.toString() +
-            "\nCorreo: " + this.correo;
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return  false;
+        Usuario usuario = (Usuario) o;
+        return getDpi() != null && getDpi().equals(usuario.getDpi());
     }
+    
+    @Override
+    public int hashCode(){
+        return Objects.hash(super.hashCode(), correo);
+    }
+    
+    // Final Métodos equals y hashcode
 }

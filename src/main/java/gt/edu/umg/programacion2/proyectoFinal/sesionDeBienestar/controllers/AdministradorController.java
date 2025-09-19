@@ -2,32 +2,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package controllers;
+package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.controllers;
 
 /**
  *
  * @author eduar
  */
-
-public class ClienteController {
+public class AdministradorController {
     
-    public void solicitarCita(){
+    public void editarCliente(){
         
     }
     
-    public void cancelarCita(){
+    public void eliminarCliente(){
         
     }
     
-    public void verPerfil(){
-        
-    }
-    
-    public void verServicios(){
-        
-    }
-    
-    public void verFacturas(){
+    public void desactivarCliente(){
         
     }
 }

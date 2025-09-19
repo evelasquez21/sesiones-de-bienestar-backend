@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package models;
+package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
 import java.time.LocalDateTime;
 
@@ -10,22 +10,22 @@ import java.time.LocalDateTime;
  *
  * @author eduar
  */
-public class RegistroAuditoria {
+public class Cita {
     private int id;
-    private Empleado empleado;
     private LocalDateTime fechaHora;
-    private String accion;
-    private String detalles;
+    private int estado;
+    private Servicio servicio;
+    private Factura factura;
     
     // Constructor de clase
-    public RegistroAuditoria(int id, Empleado empleado, LocalDateTime fechaHora, String accion, String detalles) {
+    public Cita(int id, LocalDateTime fechaHora, int estado, Servicio servicio, Factura factura) {
         this.id = id;
-        this.empleado = empleado;
         this.fechaHora = fechaHora;
-        this.accion = accion;
-        this.detalles = detalles;
+        this.estado = estado;
+        this.servicio = servicio;
+        this.factura = factura;
     }
-    
+
     // Inicio - Sección de Getters y Setters
     public int getId() {
         return id;
@@ -33,14 +33,6 @@ public class RegistroAuditoria {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Empleado getEmpleado() {
-        return empleado;
-    }
-
-    public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
     }
 
     public LocalDateTime getFechaHora() {
@@ -51,20 +43,28 @@ public class RegistroAuditoria {
         this.fechaHora = fechaHora;
     }
 
-    public String getAccion() {
-        return accion;
+    public int getEstado() {
+        return estado;
     }
 
-    public void setAccion(String accion) {
-        this.accion = accion;
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
 
-    public String getDetalles() {
-        return detalles;
+    public Servicio getServicio() {
+        return servicio;
     }
 
-    public void setDetalles(String detalles) {
-        this.detalles = detalles;
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
+    }
+
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
     }
     
     // Fin - Sección de Getters y Setters
