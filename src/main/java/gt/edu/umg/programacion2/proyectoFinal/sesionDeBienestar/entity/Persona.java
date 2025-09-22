@@ -4,12 +4,12 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import org.hibernate.annotations.CreationTimestamp;
 
 /**
  *
@@ -31,8 +31,8 @@ public abstract class Persona {
     @Column(name ="direccion")
     private String direccion;
     
-    @CreationTimestamp
     @Column(name = "fechaNacimiento", updatable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate fechaNacimiento;
     
     @Column(name ="telefono")
