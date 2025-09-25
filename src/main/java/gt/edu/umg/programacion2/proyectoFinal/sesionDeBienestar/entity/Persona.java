@@ -6,18 +6,21 @@ package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  *
  * @author eduar
  */
 
-
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Persona {
     
     // Atributos de clase
@@ -37,6 +40,21 @@ public abstract class Persona {
     
     @Column(name ="telefono")
     private int telefono;
+
+    
+    // Constructor de clase
+    public Persona() {
+    }
+
+    public Persona(BigInteger dpi, String nombreCompleto, String direccion, LocalDate fechaNacimiento, int telefono) {
+        this.dpi = dpi;
+        this.nombreCompleto = nombreCompleto;
+        this.direccion = direccion;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+    }
+    
+    
 
     // Inicio - Sección de Getters y Setters
     public BigInteger getDpi() {
@@ -81,4 +99,20 @@ public abstract class Persona {
     
     // Fin - Sección de Getters y Setters
     
+    // Inicio Métodos equals y hashcode
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return  false;
+        Persona persona = (Persona) o;
+        return getDpi() != null && getDpi().equals(persona.getDpi());
+    }
+    
+    @Override
+    public int hashCode(){
+        return Objects.hash(super.hashCode(), dpi);
+    }
+    
+    // Final Métodos equals y hashcode
 }

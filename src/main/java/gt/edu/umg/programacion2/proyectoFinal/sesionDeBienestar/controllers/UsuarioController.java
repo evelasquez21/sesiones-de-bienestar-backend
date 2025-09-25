@@ -5,7 +5,6 @@
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.controllers;
 
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Usuario;
-import java.math.BigInteger;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.UsuarioService;
+import java.math.BigInteger;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 /**
@@ -67,12 +67,7 @@ public class UsuarioController {
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable BigInteger dpi, @RequestBody Usuario detallesUsuario){
         return usuarioService.obtenerUsuarioPorDpi(dpi)
                 .map(usuarioExistente -> {
-                    usuarioExistente.setNombreCompleto(detallesUsuario.getNombreCompleto());
-                    usuarioExistente.setDireccion(detallesUsuario.getDireccion());
-                    usuarioExistente.setFechaNacimiento(detallesUsuario.getFechaNacimiento());
-                    usuarioExistente.setTelefono(detallesUsuario.getTelefono());
                     usuarioExistente.setContrasena(detallesUsuario.getContrasena());
-                    usuarioExistente.setCorreo(detallesUsuario.getCorreo());
                     return ResponseEntity.ok(usuarioService.guardarUsuario(usuarioExistente));
                 })
                 .orElse(ResponseEntity.notFound().build());

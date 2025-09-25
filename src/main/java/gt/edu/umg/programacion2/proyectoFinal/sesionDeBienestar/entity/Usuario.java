@@ -4,6 +4,7 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import java.util.Objects;
 
@@ -15,7 +16,10 @@ import java.util.Objects;
 
 @Entity
 public class Usuario extends Persona{
+    @Column(name = "correo")
     private String correo;
+    
+    @Column(name = "contrasena")
     private String contrasena;
     
     // Constructor de clase
@@ -53,7 +57,7 @@ public class Usuario extends Persona{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return  false;
         Usuario usuario = (Usuario) o;
-        return getDpi() != null && getDpi().equals(usuario.getDpi());
+        return getCorreo() != null && getCorreo().equals(usuario.getCorreo());
     }
     
     @Override

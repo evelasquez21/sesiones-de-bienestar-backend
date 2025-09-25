@@ -14,8 +14,8 @@ import java.time.LocalDate;
 public class Administrador extends Empleado{
     
     // Constructor de clase
-    public Administrador(String correo, String contrasena, BigInteger dpi, String nombreCompleto, String direccion, LocalDate fechaNacimiento, int telefono) {
-        super(correo, contrasena, dpi, nombreCompleto, direccion, fechaNacimiento, telefono);
+    public Administrador(Long codigo) {
+        super(codigo);
     }
     
 }

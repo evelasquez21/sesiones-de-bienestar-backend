@@ -5,13 +5,13 @@
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements;
 
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Usuario;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository.UsuarioRepository;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.UsuarioService;
+import java.math.BigInteger;
 
 /**
  *
@@ -41,5 +41,7 @@ public class UsuarioServiceImpl implements UsuarioService{
     public void eliminarUsuario(BigInteger dpi) {
         usuarioRepository.deleteById(dpi);
     }
+
+    
     
 }
