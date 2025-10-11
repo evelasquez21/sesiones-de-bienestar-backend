@@ -6,6 +6,7 @@ package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 
@@ -22,13 +23,12 @@ public class Usuario extends Persona{
     @Column(name = "contrasena")
     private String contrasena;
     
+    private boolean cuentaBloqueada = false;
+    private int intentosFallidos = 0;
+    private LocalDateTime tiempoDeDesbloqueo;
+    
     // Constructor de clase
     public Usuario() {
-    }
-    
-    public Usuario(String correo, String contrasena) {
-        this.correo = correo;
-        this.contrasena = contrasena;
     }
 
     // Inicio - Sección de Getters y Setters
@@ -42,6 +42,30 @@ public class Usuario extends Persona{
 
     public String getContrasena() {
         return contrasena;
+    }
+
+    public boolean isCuentaBloqueada() {
+        return cuentaBloqueada;
+    }
+
+    public void setCuentaBloqueada(boolean cuentaBloqueada) {
+        this.cuentaBloqueada = cuentaBloqueada;
+    }
+
+    public int getIntentosFallidos() {
+        return intentosFallidos;
+    }
+
+    public void setIntentosFallidos(int intentosFallidos) {
+        this.intentosFallidos = intentosFallidos;
+    }
+
+    public LocalDateTime getTiempoDeDesbloqueo() {
+        return tiempoDeDesbloqueo;
+    }
+
+    public void setTiempoDeDesbloqueo(LocalDateTime tiempoDeDesbloqueo) {
+        this.tiempoDeDesbloqueo = tiempoDeDesbloqueo;
     }
 
     public void setContrasena(String contrasena) {

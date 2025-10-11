@@ -6,6 +6,7 @@ package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository;
 
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Usuario;
 import java.math.BigInteger;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository        
 public interface UsuarioRepository extends JpaRepository<Usuario, BigInteger>{
-    
+    Optional<Usuario> findByCorreo(String correo);
 }
