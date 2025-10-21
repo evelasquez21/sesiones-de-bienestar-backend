@@ -4,43 +4,54 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
-import java.math.BigInteger;
-import java.time.LocalDate;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.AuditListener;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
  * @author eduar
  */
+
+@Entity
+@EntityListeners(AuditListener.class)
 public class Cliente extends Usuario{
-    private ArrayList<Servicio> listaServicios = new ArrayList<>();
-    private ArrayList<Factura> listaFcturas = new ArrayList<>();
+    // Relación de Muchos a muchos
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ClienteServicio> serviciosContratados = new HashSet<>();
+    
+    // Relación de uno a muchos
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Factura> listaFacturas = new ArrayList<>();
     
     // Constructor de clase
-    public Cliente(String correo, String contrasena, BigInteger dpi, String nombreCompleto, String direccion, LocalDate fechaNacimiento, int telefono) {
-        super(correo, contrasena);
-    }
 
+    public Cliente() {
+    }
     
     // Inicio - Sección de Getters y Setters
-    public ArrayList<Servicio> getListaServicios() {
-        return listaServicios;
+    public Set<ClienteServicio> getServiciosContradados() {
+        return serviciosContratados;
     }
 
-    public void setListaServicios(ArrayList<Servicio> listaServicios) {
-        this.listaServicios = listaServicios;
+    public void setServiciosContradados(Set<ClienteServicio> serviciosContradados) {
+        this.serviciosContratados = serviciosContradados;
     }
 
-    public ArrayList<Factura> getListaFcturas() {
-        return listaFcturas;
+    public List<Factura> getListaFacturas() {
+        return listaFacturas;
     }
 
-    public void setListaFcturas(ArrayList<Factura> listaFcturas) {
-        this.listaFcturas = listaFcturas;
+    public void setListaFacturas(List<Factura> listaFacturas) {
+        this.listaFacturas = listaFacturas;
     }
     
     // Fin - Sección de Getters y Setters
-    
-    
     
 }

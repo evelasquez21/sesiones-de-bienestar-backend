@@ -4,35 +4,61 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.AuditListener;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 /**
  *
  * @author eduar
  */
+
+@Entity
+@EntityListeners(AuditListener.class)
 public class Cita {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_servicio_id", nullable = false)
+    private ClienteServicio clienteServicio;
+    
+    @Column(name = "fechaHora", updatable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime fechaHora;
+    
     private int estado;
-    private Servicio servicio;
-    private Factura factura;
     
     // Constructor de clase
-    public Cita(int id, LocalDateTime fechaHora, int estado, Servicio servicio, Factura factura) {
-        this.id = id;
-        this.fechaHora = fechaHora;
-        this.estado = estado;
-        this.servicio = servicio;
-        this.factura = factura;
+    public Cita() {
+
     }
 
     // Inicio - Sección de Getters y Setters
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public ClienteServicio getClienteServicio() {
+        return clienteServicio;
+    }
+
+    public void setClienteServicio(ClienteServicio clienteServicio) {
+        this.clienteServicio = clienteServicio;
     }
 
     public LocalDateTime getFechaHora() {
@@ -50,23 +76,9 @@ public class Cita {
     public void setEstado(int estado) {
         this.estado = estado;
     }
-
-    public Servicio getServicio() {
-        return servicio;
-    }
-
-    public void setServicio(Servicio servicio) {
-        this.servicio = servicio;
-    }
-
-    public Factura getFactura() {
-        return factura;
-    }
-
-    public void setFactura(Factura factura) {
-        this.factura = factura;
-    }
     
     // Fin - Sección de Getters y Setters
+
     
+
 }

@@ -4,6 +4,7 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements;
 
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ServicioDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Servicio;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository.ServicioRepository;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.ServicioService;
@@ -21,6 +22,22 @@ import org.springframework.stereotype.Service;
 public class ServicioServiceImpl implements ServicioService{
     @Autowired
     private ServicioRepository servicioRepository;
+    
+    public Servicio crearNuevoServicio(ServicioDTO servicioDTO){
+        if (servicioRepository.findByNombre(servicioDTO.getNombre()).isPresent()) {
+            throw  new IllegalStateException("Ya existe un servicio con el nombre: " + servicioDTO.getNombre());
+        }
+        
+        Servicio nuevoServicio = new Servicio();
+        nuevoServicio.setCodigo(servicioDTO.getCodigo());
+        nuevoServicio.setNombre(servicioDTO.getNombre());
+        nuevoServicio.setEstado(servicioDTO.isEstado());
+        nuevoServicio.setMaxConcurrentes(servicioDTO.getMaxConcurrentes());
+        nuevoServicio.setDuracion(servicioDTO.getDuracion());
+        nuevoServicio.setPrecio(servicioDTO.getPrecio());
+        
+        return servicioRepository.save(nuevoServicio);
+    }
 
     @Override
     public List<Servicio> obtenerTodoServicios() {

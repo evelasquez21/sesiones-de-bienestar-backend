@@ -4,18 +4,19 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
-import java.math.BigInteger;
-import java.time.LocalDate;
+import jakarta.persistence.Entity;
 
 /**
  *
  * @author eduar
  */
+
+@Entity
 public class Recepcionista extends Empleado{
     
     // Constructor de clase
-    public Recepcionista(Long codigo) {
-        super(codigo);
+    public Recepcionista() {
+        
     }
 
 }

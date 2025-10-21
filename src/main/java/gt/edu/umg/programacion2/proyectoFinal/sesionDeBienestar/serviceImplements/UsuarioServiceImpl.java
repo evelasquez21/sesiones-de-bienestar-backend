@@ -4,6 +4,7 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements;
 
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.RegistroPeticionDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Usuario;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository.UsuarioRepository;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.UsuarioService;
 import java.math.BigInteger;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  *
@@ -21,6 +24,30 @@ import java.math.BigInteger;
 public class UsuarioServiceImpl implements UsuarioService{
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
+    
+    public Usuario registrarUsuario(RegistroPeticionDTO registroPeticion){
+        if (usuarioRepository.findByCorreo(registroPeticion.getCorreo()).isPresent()){
+            throw new RuntimeException("El correco electrónico ya está en uso");
+        }
+        
+        Usuario nuevoUsuario = new Usuario();
+        
+        nuevoUsuario.setDpi(registroPeticion.getDpi());
+        nuevoUsuario.setNombreCompleto(registroPeticion.getNombreCompleto());
+        nuevoUsuario.setDireccion(registroPeticion.getDireccion());
+        nuevoUsuario.setFechaNacimiento(registroPeticion.getFechaNacimiento());
+        nuevoUsuario.setTelefono(registroPeticion.getTelefono());
+        nuevoUsuario.setCorreo(registroPeticion.getCorreo());
+        
+        nuevoUsuario.setContrasena(passwordEncoder.encode(registroPeticion.getContrasena()));
+        nuevoUsuario.setCuentaBloqueada(false);
+        
+        return usuarioRepository.save(nuevoUsuario);
+    }
 
     @Override
     public List<Usuario> obtenerTodoLosUsuarios() {

@@ -4,10 +4,9 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository;
 
-import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Servicio;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.HistorialCambios;
 
 /**
  *
@@ -15,6 +14,6 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface ServicioRepository extends JpaRepository<Servicio, String>{
-    Optional<Servicio> findByNombre(String nombre);
+public interface HistorialCambiosRepository extends JpaRepository<HistorialCambios, Long>{
+    
 }

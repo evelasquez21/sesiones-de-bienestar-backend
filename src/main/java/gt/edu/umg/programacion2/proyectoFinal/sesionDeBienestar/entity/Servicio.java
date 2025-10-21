@@ -4,16 +4,24 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.AuditListener;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  *
  * @author eduar
  */
 @Entity
+@EntityListeners(AuditListener.class)
 public class Servicio {
     
     // Atributos de clase
@@ -21,7 +29,7 @@ public class Servicio {
     @Column(name = "codigo")
     private String codigo;
     
-    @Column(name = "nombre")
+    @Column(name = "nombre", unique = true)
     private String nombre;
     
     @Column(name = "precio")
@@ -36,22 +44,17 @@ public class Servicio {
     @Column(name = "estado")
     private boolean estado;
     
+    @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<ClienteServicio> clientes = new HashSet<>();
+    
     // Constructor de clase
     public Servicio() {
         
     }
-    
-    public Servicio(String codigo, String nombre, double precio, int duracion, int maxConcurrentes, boolean estado) {
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.precio = precio;
-        this.duracion = duracion;
-        this.maxConcurrentes = maxConcurrentes;
-        this.estado = estado;
-    }
-    
+
     // Inicio - Sección de Getters y Setters
-    public String getCodigo() {
+    public String getCodigo(){
         return codigo;
     }
 
@@ -98,12 +101,21 @@ public class Servicio {
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
+
+    public Set<ClienteServicio> getClientes() {
+        return clientes;
+    }
     
+    public void setClientes(Set<ClienteServicio> clientes) {
+        this.clientes = clientes;
+    }
+
     // Fin - Sección de Getters y Setters
+    
     
     // Inicio Métodos equals y hashcode
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return  false;
