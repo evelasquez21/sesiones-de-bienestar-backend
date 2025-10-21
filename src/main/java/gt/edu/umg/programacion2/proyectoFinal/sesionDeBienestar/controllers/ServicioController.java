@@ -4,10 +4,12 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.controllers;
 
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ServicioDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Servicio;
-import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.ServicioService;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements.ServicioServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,10 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServicioController {
     
     @Autowired
-    private ServicioService servicioService;
+    private ServicioServiceImpl servicioService;
     
     // Endpoint - leer
-    @GetMapping
+    @GetMapping("/lista")
     public List<Servicio> obtenerTodosLosServicios(){
         return servicioService.obtenerTodoServicios();
     }
@@ -44,9 +46,19 @@ public class ServicioController {
     }
     
     // Endpoint - crear
-    @PostMapping
-    public Servicio crearUsuario(@RequestBody Servicio servicio){
-        return servicioService.guardarServicio(servicio);
+    @PostMapping("/nuevo")
+    public ResponseEntity<String> programarCita(@RequestBody ServicioDTO servicioDTO){
+        try {
+            Servicio nuevoServicio = servicioService.crearNuevoServicio(servicioDTO);
+            
+            return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("Servicio creado");
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(e.getMessage());
+        }
     }
     
     // Endpoint - eliminar

@@ -4,6 +4,7 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.config;
 
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.components.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,9 @@ public class SecurityConfig {
     
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+    
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAutenticationEntryPoint;
             
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -37,12 +41,19 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
     
+    // Determinación de las rutas sin necesidad de autentificaicón previa.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
+            // Sección de autentificación por Entrada
+            .exceptionHandling(exception -> exception
+                .authenticationEntryPoint(jwtAutenticationEntryPoint)
+            )
+                
+            // Api's publicas sin autentificación
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                .requestMatchers("/api/auth/login", "/api/auth/register", "/api/servicios/lista").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -4,9 +4,16 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.AuditListener;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -16,6 +23,7 @@ import java.util.Objects;
  */
 
 @Entity
+@EntityListeners(AuditListener.class)
 public class Usuario extends Persona{
     @Column(name = "correo")
     private String correo;
@@ -26,6 +34,10 @@ public class Usuario extends Persona{
     private boolean cuentaBloqueada = false;
     private int intentosFallidos = 0;
     private LocalDateTime tiempoDeDesbloqueo;
+    
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Notificacion> notificaciones = new ArrayList<>();
     
     // Constructor de clase
     public Usuario() {
@@ -72,7 +84,16 @@ public class Usuario extends Persona{
         this.contrasena = contrasena;
     }
     
+    public List<Notificacion> getNotificaciones() {
+        return notificaciones;
+    }
+
+    public void setNotificaciones(List<Notificacion> notificaciones) {
+        this.notificaciones = notificaciones;
+    }
+    
     // Fin - Sección de Getters y Setters
+    
     
     // Inicio Métodos equals y hashcode
     @Override

@@ -2,45 +2,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
+package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 /**
  *
  * @author eduar
  */
-
-@Entity
-public class Notificacion {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class NotificacionDTO {
     private int id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_dpi", nullable = false)
-    private Usuario usuario;
+    private UsuarioResumenDTO usuario;
     
-    @Column(nullable = false)
     private String mensaje;
     private LocalDateTime fechaEnvio;
     
     private boolean estado;
-
+    
     // Constructor de clase
-    public Notificacion() {
-       
-    }
 
+    public NotificacionDTO() {
+    }
+    
     // Inicio - Sección de Getters y Setters
     public int getId() {
         return id;
@@ -50,11 +34,11 @@ public class Notificacion {
         this.id = id;
     }
 
-    public Usuario getUsuario() {
+    public UsuarioResumenDTO getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(UsuarioResumenDTO usuario) {
         this.usuario = usuario;
     }
 
@@ -83,5 +67,4 @@ public class Notificacion {
     }
     
     // Fin - Sección de Getters y Setters
-    
 }

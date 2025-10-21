@@ -24,8 +24,8 @@ public class RegistroPeticionDTO {
     
     @Column(name = "fechaNacimiento", updatable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
-    
     private LocalDate fechaNacimiento;
+    
     private int telefono;
     
     @NotBlank(message = "El correo eléctronico no puede estar vacío")

@@ -4,18 +4,19 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
-import java.math.BigInteger;
-import java.time.LocalDate;
+import jakarta.persistence.Entity;
 
 /**
  *
  * @author eduar
  */
+
+@Entity
 public class Administrador extends Empleado{
     
     // Constructor de clase
-    public Administrador(Long codigo) {
-        super(codigo);
+    public Administrador() {
+        
     }
     
 }

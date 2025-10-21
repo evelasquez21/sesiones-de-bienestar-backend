@@ -5,9 +5,11 @@
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.AuditListener;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.HashSet;
@@ -19,6 +21,7 @@ import java.util.Set;
  * @author eduar
  */
 @Entity
+@EntityListeners(AuditListener.class)
 public class Servicio {
     
     // Atributos de clase

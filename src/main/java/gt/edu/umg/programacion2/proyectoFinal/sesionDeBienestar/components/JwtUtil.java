@@ -23,10 +23,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
     
+    // Uso de variable local para el almacenamiento de la llave
     @Value("${jwt.secret.key}")
     private String secretKeyString;
     
     private Key key;
+    // Tiempo de uso para el Token de 1 minuto
     private final long EXPIRATION_TIME_MS = 1000 * 60 * 60;
     
     @PostConstruct
@@ -35,6 +37,7 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
     
+    // Metodo para generar el Token por medio del correo electornico
     public String generarToken(String username) {
         return Jwts.builder()
             .setSubject(username)
@@ -43,6 +46,8 @@ public class JwtUtil {
             .signWith(key)
             .compact();
     }
+    
+    // Inicio de métodos complementarios
     
     public boolean validarToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
@@ -68,5 +73,8 @@ public class JwtUtil {
     
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    
     }
+    
+    // Fin de métodos complementarios
 }

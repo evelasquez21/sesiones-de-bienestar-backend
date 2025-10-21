@@ -8,6 +8,7 @@ import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ClienteCrea
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ClienteDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ClienteServicioDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.FacturaDTO;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.RegistroPeticionDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Cliente;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
@@ -15,7 +16,8 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.config.SecurityConfig;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,6 +30,10 @@ public class ClienteServiceImpl{
 
     @Autowired
     private ClienteRepository clienteRepo;
+    
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
     
     @Transactional
     public ClienteDTO obtenerClienteComoDTO(BigInteger dpi){
@@ -55,6 +61,29 @@ public class ClienteServiceImpl{
         
         Cliente clienteGuardado = clienteRepo.save(nuevoCliente);
         return convertirAClienteDTO(clienteGuardado);
+    }
+    
+    public Cliente registrarCliente(RegistroPeticionDTO registroPeticion){
+        if (clienteRepo.findByCorreo(registroPeticion.getCorreo()).isPresent()){
+            throw new RuntimeException("El correco electrónico ya está en uso");
+        } else if(clienteRepo.findById(registroPeticion.getDpi()).isPresent()){
+            throw new RuntimeException("El número de DPI ya está registrado");
+        }
+        
+        
+        Cliente nuevoCliente = new Cliente();
+        
+        nuevoCliente.setDpi(registroPeticion.getDpi());
+        nuevoCliente.setNombreCompleto(registroPeticion.getNombreCompleto());
+        nuevoCliente.setDireccion(registroPeticion.getDireccion());
+        nuevoCliente.setFechaNacimiento(registroPeticion.getFechaNacimiento());
+        nuevoCliente.setTelefono(registroPeticion.getTelefono());
+        nuevoCliente.setCorreo(registroPeticion.getCorreo());
+        
+        nuevoCliente.setContrasena(passwordEncoder.encode(registroPeticion.getContrasena()));
+        nuevoCliente.setCuentaBloqueada(false);
+        
+        return clienteRepo.save(nuevoCliente);
     }
     
     private ClienteDTO convertirAClienteDTO(Cliente cliente){

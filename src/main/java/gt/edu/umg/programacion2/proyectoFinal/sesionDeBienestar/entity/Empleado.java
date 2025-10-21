@@ -6,7 +6,6 @@ package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import java.util.Objects;
 
 /**
@@ -23,10 +22,7 @@ public class Empleado extends Usuario{
     public Empleado(){
         
     }
-    
-    public Empleado(Long codigo) {
-        this.codigo = codigo;
-    }
+
     
     
     // Inicio - Sección de Getters y Setters

@@ -6,7 +6,6 @@ package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplemen
 
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Usuario;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository.UsuarioRepository;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.LockedException;
@@ -32,17 +31,16 @@ public class DetallesUsuarioServiceImpl implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByCorreo(username)
-            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-        
-        if (usuario.isCuentaBloqueada()){
-            if (usuario.getTiempoDeDesbloqueo() != null && usuario.getTiempoDeDesbloqueo().plusMinutes(intentosSesion.duracionMinutos).isAfter(LocalDateTime.now())) {
-                throw new LockedException("La cuenta ha sido bloqueda. Intente nuevamente dentro de 5 minutos");
-            }
-        } else {
-            intentosSesion.sesionExitosa(username);
+        // Validación de cuenta bloqueada
+        if (intentosSesion.sesionBloqueada(username)){
+            throw new LockedException("Cuenta bloqueada por demasiados intentos fallidos, pruebe dentro de 15 minutos");
         }
         
+        // Si no está bloqueada, buscara al usuario
+        Usuario usuario = usuarioRepository.findByCorreo(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Este correo electrónico no esta registrado"));
+        
+        // Se eliminará el bloqueo del Usuario
         return new User(usuario.getCorreo(), usuario.getContrasena(), new ArrayList<>());
     }
     

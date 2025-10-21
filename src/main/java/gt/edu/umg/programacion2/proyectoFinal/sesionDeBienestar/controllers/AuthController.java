@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.SesionPeticionDTO;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements.ClienteServiceImpl;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements.IntentosDeSesionServiceImpl;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 
 /**
  *
@@ -38,30 +40,25 @@ public class AuthController {
     private IntentosDeSesionServiceImpl intentoSesion;
     
     @Autowired
-    private UsuarioServiceImpl usuarioServiceImpl;
+    private ClienteServiceImpl clienteServiceImpl;
     
     @PostMapping("/login")
     public ResponseEntity<?> autenticarUsuario(@Valid @RequestBody SesionPeticionDTO sesionPeticion){
-        try {
-            authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(sesionPeticion.getCorreo(), sesionPeticion.getContrasena())
-            );
-            
-            intentoSesion.SesionFallida(sesionPeticion.getCorreo());
-            
-            final String jwt = jwutil.generarToken(sesionPeticion.getCorreo());
-            
-            return ResponseEntity.ok(new JwtResponse(jwt));
-        } catch (Exception e) {
-            intentoSesion.SesionFallida(sesionPeticion.getCorreo());
-            throw e;
-        }
+        );
+        
+        intentoSesion.sesionExitosa(sesionPeticion.getCorreo());
+        
+        final String jwt = jwutil.generarToken(sesionPeticion.getCorreo());
+        
+        return ResponseEntity.ok(new JwtResponse(jwt));
     }
     
     @PostMapping("/register")
-    public ResponseEntity<?> registrarUsuario(@Valid @RequestBody RegistroPeticionDTO registroPeticion){
+    public ResponseEntity<?> registrarCliente(@Valid @RequestBody RegistroPeticionDTO registroPeticion){
         try {
-            usuarioServiceImpl.registrarUsuario(registroPeticion);
+            clienteServiceImpl.registrarCliente(registroPeticion);
             return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body("Usuario creado exitosamente");

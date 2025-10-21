@@ -4,6 +4,7 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -11,8 +12,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -35,6 +39,9 @@ public class ClienteServicio {
     private Servicio servicio;
     
     private LocalDate fechaSuscripcion;
+    
+    @OneToMany(mappedBy = "clienteServicio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cita> citas = new ArrayList<>();
 
     // Constructor de clase
     public ClienteServicio() {
@@ -74,5 +81,15 @@ public class ClienteServicio {
         this.fechaSuscripcion = fechaSuscripcion;
     }
     
+    public List<Cita> getCitas() {
+        return citas;
+    }
+
+    public void setCitas(List<Cita> citas) {
+        this.citas = citas;
+    }
+    
     // Fin - Sección de Getters y Setters
+
+    
 }

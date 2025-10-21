@@ -32,6 +32,8 @@ public class JwtRequestFilter extends OncePerRequestFilter{
     @Autowired
     private DetallesUsuarioServiceImpl detalleUsuarioServicio;
 
+    
+    // Método para la validación de la autorización utilizando Bearer
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
@@ -51,7 +53,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
             UserDetails userDetails = this.detalleUsuarioServicio.loadUserByUsername(username);
             
             if (jwtUtil.validarToken(jwt, userDetails)) {
-                // 3. Si el token es válido, establece la autenticación en el contexto de seguridad
+                // Si el token es válido, establece la autenticación en el contexto de seguridad
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

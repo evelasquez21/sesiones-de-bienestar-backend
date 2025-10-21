@@ -4,8 +4,10 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity;
 
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.AuditListener;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +20,7 @@ import java.util.Set;
  */
 
 @Entity
+@EntityListeners(AuditListener.class)
 public class Cliente extends Usuario{
     // Relación de Muchos a muchos
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
