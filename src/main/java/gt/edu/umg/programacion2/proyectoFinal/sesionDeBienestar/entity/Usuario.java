@@ -11,6 +11,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +36,15 @@ public class Usuario extends Persona{
     private int intentosFallidos = 0;
     private LocalDateTime tiempoDeDesbloqueo;
     
+    // Relación de usuario y notificación
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Notificacion> notificaciones = new ArrayList<>();
+    
+    // Relación de usuario y empleados
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Empleado perfilEmpleado;
     
     // Constructor de clase
     public Usuario() {
@@ -90,6 +97,14 @@ public class Usuario extends Persona{
 
     public void setNotificaciones(List<Notificacion> notificaciones) {
         this.notificaciones = notificaciones;
+    }
+
+    public Empleado getPerfilEmpleado() {
+        return perfilEmpleado;
+    }
+
+    public void setPerfilEmpleado(Empleado perfilEmpleado) {
+        this.perfilEmpleado = perfilEmpleado;
     }
     
     // Fin - Sección de Getters y Setters

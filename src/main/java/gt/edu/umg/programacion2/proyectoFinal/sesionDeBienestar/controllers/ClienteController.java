@@ -6,6 +6,7 @@ package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.controllers;
 
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ClienteCreacionDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ClienteDTO;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ClienteResumenDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements.ClienteServiceImpl;
 import java.math.BigInteger;
 import java.util.List;
@@ -49,5 +50,14 @@ public class ClienteController {
     @ResponseStatus(HttpStatus.CREATED)
     public ClienteDTO crearCliente(@RequestBody ClienteCreacionDTO clienteDTO){
         return clienteServiceImpl.creaClienteDTO(clienteDTO);
+    }
+    
+    // panel de empleado
+    @GetMapping("/panel")
+    public ResponseEntity<ClienteResumenDTO> verPanelEmpleado() {
+        // Obtener al empleado actual
+        ClienteResumenDTO panelDTO = clienteServiceImpl.obtenerPanelCliente();
+            
+        return ResponseEntity.ok(panelDTO);
     }
 }

@@ -28,7 +28,7 @@ public class JwtUtil {
     private String secretKeyString;
     
     private Key key;
-    // Tiempo de uso para el Token de 1 minuto
+    // Tiempo de uso para el Token de 1 hora
     private final long EXPIRATION_TIME_MS = 1000 * 60 * 60;
     
     @PostConstruct

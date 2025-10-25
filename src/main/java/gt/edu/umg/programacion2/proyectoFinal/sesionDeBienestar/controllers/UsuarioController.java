@@ -4,8 +4,12 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.controllers;
 
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.RegistroPeticionDTO;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.UsuarioDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Usuario;
-import java.util.List;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository.UsuarioRepository;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements.UsuarioServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +19,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.UsuarioService;
 import java.math.BigInteger;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 /**
@@ -29,12 +36,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 public class UsuarioController {
     
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioServiceImpl usuarioService;
+    
+    @Autowired
+    private UsuarioRepository usuarioRepo;
     
     // Endpoint - leer
     @GetMapping
-    public List<Usuario> obtenerTodoLosUsuarios(){
-        return usuarioService.obtenerTodoLosUsuarios();
+    public UsuarioDTO obtenerUsuarioActual(){
+        Usuario usuarioActual = getUsuarioActual();
+        return usuarioService.obtenerUsuarioAcutal(usuarioActual);
     }
     
     // Endpoint - buscar por id
@@ -46,9 +57,18 @@ public class UsuarioController {
     }
     
     // Endpoint - crear
-    @PostMapping
-    public Usuario crearUsuario(@RequestBody Usuario usuario){
-        return usuarioService.guardarUsuario(usuario);
+    @PostMapping("/register")
+    public ResponseEntity<?> registrarCliente(@Valid @RequestBody RegistroPeticionDTO registroPeticion){
+        try {
+            usuarioService.registrarUsuario(registroPeticion);
+            return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("Usuario creado exitosamente");
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+        }
     }
     
     // Endpoint - eliminar
@@ -71,6 +91,14 @@ public class UsuarioController {
                     return ResponseEntity.ok(usuarioService.guardarUsuario(usuarioExistente));
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+    
+    // Método para obtener el usuario actual autenticado
+    private Usuario getUsuarioActual(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDatails = (UserDetails) authentication.getPrincipal();
+        return usuarioRepo.findByCorreo(userDatails.getUsername())
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 }
    
