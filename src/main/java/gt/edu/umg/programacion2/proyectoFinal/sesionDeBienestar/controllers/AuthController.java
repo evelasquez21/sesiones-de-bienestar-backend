@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.SesionPeticionDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements.ClienteServiceImpl;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements.IntentosDeSesionServiceImpl;
-import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;

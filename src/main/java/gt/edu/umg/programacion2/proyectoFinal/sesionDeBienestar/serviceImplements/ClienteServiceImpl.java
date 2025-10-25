@@ -6,19 +6,25 @@ package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplemen
 
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ClienteCreacionDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ClienteDTO;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ClienteResumenDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.ClienteServicioDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.FacturaDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.RegistroPeticionDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Cliente;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Usuario;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository.ClienteRepository;
-import jakarta.transaction.Transactional;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository.UsuarioRepository;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -34,6 +40,25 @@ public class ClienteServiceImpl{
     @Autowired
     @Lazy
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private UsuarioRepository usuarioRepo;
+    
+    @Transactional(readOnly = true)
+    public ClienteResumenDTO obtenerPanelCliente(){
+        // Autentificación de información
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        
+        // Búsqueda del usuario
+        Usuario usuario = usuarioRepo.findByCorreo(userDetails.getUsername())
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+           
+        Cliente cliente = clienteRepo.findByCorreo(usuario.getCorreo())
+            .orElseThrow(() -> new RuntimeException("El usuario actual no es un cliente"));
+        
+        return convertirAResumenDTO(cliente);
+    }
     
     @Transactional
     public ClienteDTO obtenerClienteComoDTO(BigInteger dpi){
@@ -125,4 +150,14 @@ public class ClienteServiceImpl{
         return dto;
     }
     
+    // Conversión a DTO con información básica
+    private ClienteResumenDTO convertirAResumenDTO(Cliente cliente){
+        // Creación del DTo principal
+        ClienteResumenDTO clienteResumen = new ClienteResumenDTO();
+        
+        clienteResumen.setDpi(cliente.getDpi());
+        clienteResumen.setNombreCompleto(cliente.getNombreCompleto());
+        
+        return clienteResumen;
+    }
 }

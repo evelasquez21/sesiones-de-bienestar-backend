@@ -4,13 +4,19 @@
  */
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.controllers;
 
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.EmpleadoDTO;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.EmpleadoPanelDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Empleado;
-import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.EmpleadoService;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Usuario;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.repository.UsuarioRepository;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements.EmpleadoServiceImpl;
 import java.math.BigInteger;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,36 +34,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmpleadoController {
     
     @Autowired
-    private EmpleadoService empleadoService;
-    
-     // Endpoint - leer
-    @GetMapping
-    public List<Empleado> obtenerTodoEmpleado(){
-        return empleadoService.obtenerTodoEmpleado();
-    }
-    
-    // Endpoint - buscar por id
-    @GetMapping("/{dpi}")
-    public ResponseEntity<Empleado> obtenerPorCodgio(@PathVariable BigInteger dpi) {
-        return empleadoService.obtenerEmpleadoDpi(dpi)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+    private EmpleadoServiceImpl empleadoService;
     
     // Endpoint - crear
-    @PostMapping
-    public Empleado crearEmpleado(@RequestBody Empleado empleado){
-        return empleadoService.guardarEmpleado(empleado);
+    @PostMapping("/{dpi}")
+    public ResponseEntity<?> asignarEmpleado(@PathVariable BigInteger dpi, @RequestBody EmpleadoDTO empleadoDTO){
+        try {
+            empleadoService.asignarEmpleado(dpi, empleadoDTO);
+            return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("Empleado asignado");
+        } catch (Exception e) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+        }
     }
     
-    // Endpoint - eliminar
-    @DeleteMapping("/{dpi}")
-    public ResponseEntity<Void> eliminarEmpleado(@PathVariable BigInteger dpi){
-        return empleadoService.obtenerEmpleadoDpi(dpi)
-                .map(empleado -> {
-                    empleadoService.eliminarEmpleado(dpi);
-                    return ResponseEntity.ok().<Void>build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+    // panel de empleado
+    @GetMapping("/panel")
+    public ResponseEntity<EmpleadoPanelDTO> verPanelEmpleado() {
+        // Obtener al empleado actual
+        EmpleadoPanelDTO panelDTO = empleadoService.obtenerPanelEmpleado();
+            
+        return ResponseEntity.ok(panelDTO);
     }
 }

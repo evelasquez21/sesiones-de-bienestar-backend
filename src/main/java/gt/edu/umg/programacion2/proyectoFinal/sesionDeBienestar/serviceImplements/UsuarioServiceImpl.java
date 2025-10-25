@@ -5,6 +5,7 @@
 package gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.serviceImplements;
 
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.RegistroPeticionDTO;
+import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.dtos.UsuarioDTO;
 import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.entity.Usuario;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import gt.edu.umg.programacion2.proyectoFinal.sesionDeBienestar.services.Usuario
 import java.math.BigInteger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -32,7 +34,10 @@ public class UsuarioServiceImpl implements UsuarioService{
     public Usuario registrarUsuario(RegistroPeticionDTO registroPeticion){
         if (usuarioRepository.findByCorreo(registroPeticion.getCorreo()).isPresent()){
             throw new RuntimeException("El correco electrónico ya está en uso");
+        } else if(usuarioRepository.findById(registroPeticion.getDpi()).isPresent()){
+            throw new RuntimeException("El número de DPI ya está registrado");
         }
+        
         
         Usuario nuevoUsuario = new Usuario();
         
@@ -47,6 +52,26 @@ public class UsuarioServiceImpl implements UsuarioService{
         nuevoUsuario.setCuentaBloqueada(false);
         
         return usuarioRepository.save(nuevoUsuario);
+    }
+    
+    @Transactional
+    public UsuarioDTO obtenerUsuarioAcutal(Usuario usuario){
+        Usuario usuarioActual = usuarioRepository.findById(usuario.getDpi()).orElse(null);
+        return convertirADto(usuarioActual);
+    }
+    
+    // Convertir entidad a DTO
+    private UsuarioDTO convertirADto(Usuario usuario){
+        // Creación de DTO principal
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setDpi(usuario.getDpi());
+        usuarioDTO.setNombreCompleto(usuario.getNombreCompleto());
+        usuarioDTO.setDireccion(usuario.getDireccion());
+        usuarioDTO.setFechaNacimiento(usuario.getFechaNacimiento());
+        usuarioDTO.setTelefono(usuario.getTelefono());
+        usuarioDTO.setCorreo(usuario.getCorreo());
+        
+        return usuarioDTO;
     }
 
     @Override
